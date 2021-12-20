@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #ababab;
+  padding: 1rem 5vw;
+}
+
+h1 {
+  color: #111;
+  text-align: center;
+}
+
+.btn {
+  padding: 0.5rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.limitBox input {
+  border: none;
+  outline: none;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 150px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.details {
+  flex: 1 0 200px;
+}
+
+.rejected div {
+  /* word-break: break-all; */
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+.primes div {
+  margin: 1rem 1rem 1rem 0;
+}
+
+.grid {
+  margin: 1rem auto 0;
+  max-width: 1061px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: #333;
+  border: 1px solid #333;
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
+.grid .box {
+  flex: 1 0 50px;
+  height: 50px;
+  background: #ababab;
+  display: grid;
+  place-items: center;
+}
+
+.grid .box.isPrime {
+  background: rgb(0, 0, 0);
+  color: #ababab;
+}
+
+.grid .box.isComposite {
+  --h: -70;
+  --s: 100%;
+  --l: 33.33%;
+  background: hsl(calc(var(--h) + (var(--i) * 80)), var(--s), var(--l));
+  mix-blend-mode: difference;
+  color: #fff;
+}

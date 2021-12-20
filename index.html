@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sieve Of Eratosthenes</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Sieve Of Eratosthenes</h1>
+    <hr />
+    <div class="container">
+      <div class="details">
+        <!-- <div class="limitBox">
+          <label for="inputLimit">Enter the limit value</label>
+          <input
+            type="number"
+            name="limit"
+            id="inputLimit"
+            placeholder="Enter limit"
+            min="2"
+            max="10000"
+            value="100"
+          />
+          <button class="btn limit">Confirm Limit</button>
+        </div> -->
+        <button class="btn mark">Mark Primes</button>
+
+        <div class="rejected">
+          <h3>Rejected Numbers</h3>
+        </div>
+        <div class="primes">
+          <h3>Prime Numbers</h3>
+        </div>
+      </div>
+
+      <div class="grid"></div>
+    </div>
+
+    <script>
+      const grid = document.querySelector(".grid");
+      const btnMark = document.querySelector(".btn.mark");
+      //   const inputLimit = document.querySelector("#inputLimit");
+      //   const btnLimit = document.querySelector(".btn.limit");
+
+      const renderChild = (num) => {
+        const box = document.createElement("div");
+        box.innerHTML = num;
+        box.classList.add("box");
+        grid.appendChild(box);
+      };
+
+      let LIMIT = 300;
+      for (let i = 1; i <= LIMIT; i++) renderChild(i);
+
+      let flags = new Array(LIMIT).fill(true);
+
+      function* markPrimes(limit) {
+        for (
+          let num = 2, count = 0;
+          num <= Math.floor(Math.sqrt(limit));
+          num++
+        ) {
+          if (!flags[num - 1]) continue;
+          grid.children[num - 1].classList.add("isPrime");
+          count++;
+
+          let rejected = num + " : ";
+          for (let i = num; num * i <= limit; i++) {
+            const flagIdx = num * i - 1;
+            if (flags[flagIdx]) {
+              grid.children[flagIdx].classList.add("isComposite");
+              grid.children[flagIdx].style.setProperty("--i", count);
+              flags[flagIdx] = false;
+              rejected += flagIdx + 1 + ",";
+            }
+          }
+          yield rejected.slice(0, -1);
+        }
+      }
+
+      let iter = markPrimes(LIMIT);
+      //   console.log(iter);
+
+      //   btnLimit.addEventListener("click", () => {
+      //     console.log(inputLimit.value);
+      //     grid.innerHTML = "";
+      //     for (let i = 1; i <= inputLimit.value; i++) renderChild(i);
+      //     flags = new Array(inputLimit.value).fill(true);
+      //     iter = markPrimes(inputLimit.value);
+      //   });
+
+      btnMark.addEventListener("click", () => {
+        const v = iter.next();
+        console.log(v);
+        if (v.done) {
+          const unmarkedBoxes = document.querySelectorAll(
+            ".box:not(.isPrime):not(.isComposite)"
+          );
+          unmarkedBoxes.forEach((box) => box.classList.add("isPrime"));
+          document.querySelector(".box").classList.remove("isPrime");
+
+          const primes = document.querySelector(".primes");
+          const pdiv = document.createElement("div");
+          pdiv.innerHTML = flags
+            .map((v, idx) => (v ? idx + 1 : v))
+            .filter((v) => !!v)
+            .join(", ");
+          primes.appendChild(pdiv);
+        } else {
+          const rejected = document.querySelector(".rejected");
+
+          const div = document.createElement("div");
+          div.innerHTML = v.value;
+          rejected.appendChild(div);
+        }
+      });
+    </script>
+  </body>
+</html>
